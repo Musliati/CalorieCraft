@@ -1,38 +1,44 @@
 package caloritracker;
 
+import caloritracker.scenes.LoginScene;
+import caloritracker.scenes.SplashScreen;
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class App extends Application{
-    
+public class App extends Application {
+
     @Override
-    public void start(Stage PrimaryStage){
-        PrimaryStage.setTitle("Calori Tracker");
-        PrimaryStage.setResizable(false);
+    public void start(Stage stage) {
+        stage.setTitle("Calorie Tracker");
+        stage.setResizable(false);
+        
+        SplashScreen splashScreen = new SplashScreen(stage);
+        splashScreen.show();
 
-        HBox hBox = new HBox();
-        // hBox.setStyle("-fx-background-image : url('/CalorieTracker.jpg')");
-        hBox.setStyle("-fx-background-image : url('/CalorieTracker.jpg'); -fx-background-repeat: no-repeat;");
-        Scene scene = new Scene(hBox, 740, 480);
-        // PrimaryStage.setMaximized(true);
-        PrimaryStage.setScene(scene);
-        PrimaryStage.show();
+        new Thread(() -> {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
+            Platform.runLater(() -> {
+                stage.close();
+
+                VBox root = new VBox();
+                Scene scene = new Scene(root, 750, 500);
+                stage.setScene(scene);
+                stage.show();
+
+                LoginScene loginScene = new LoginScene(stage);
+                loginScene.show();
+            });
+        }).start();
     }
-    
-    
+
     public static void main(String[] args) {
         launch(args);
     }
